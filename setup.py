@@ -22,7 +22,7 @@ def get_long_description():
 setup(
     name='flake8-print',
     version=get_version(),
-    description="print statement checker plugin for flake8",  # noqa
+    description="print statement checker plugin for flake8",
     long_description=get_long_description(),
     keywords='flake8 print',
     author='Joseph Kahn',
