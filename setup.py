@@ -18,6 +18,9 @@ def get_long_description():
             descr.append(f.read())
     return '\n\n'.join(descr)
 
+install_requires = ['flake8']
+
+test_requires = ['nose']
 
 setup(
     name='flake8-print',
@@ -36,6 +39,9 @@ setup(
             'flake8_print = flake8_print:check_for_print_statements',
         ],
     },
+    install_requires=install_requires,
+    tests_require=test_requires,
+    test_suite="nose.collector",
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',

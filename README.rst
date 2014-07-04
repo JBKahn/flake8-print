@@ -25,9 +25,25 @@ available in ``flake8``::
     2.0 (pep8: 1.4.5, flake8-print: 1.0, pyflakes: 0.6.1)
 
 
+To Fix
+------------
+
+Cover multline comments and doc strings.
+
+
 Changes
 -------
 
-1.0 - 2014-06-30
+1.2 - 2014-06-30
+````````````````
+* Does not catch the word print in single line strings
+* Does not catch inline comments with print in it
+* Added tests
+
+1.1 - 2014-06-30
 ````````````````
 * First release
+
+1.0 - 2014-06-30
+````````````````
+* Whoops
