@@ -1,7 +1,7 @@
 import pep8
 import re
 
-__version__ = '1.2'
+__version__ = '1.2.1'
 
 PRINT_REGEX = re.compile(r'(print)')
 PRINT_ERROR_CODE = 'T001'

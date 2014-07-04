@@ -1,7 +1,7 @@
 Flake8 print plugin
 ==================
 
-Check for pdb;idbp imports and set traces.
+Check for Print statements in python files. Currently gives false positives of doc strings and mult line strings. Lots of work to do.
 
 This module provides a plugin for ``flake8``, the Python code checker.
 
@@ -25,7 +25,7 @@ available in ``flake8``::
     2.0 (pep8: 1.4.5, flake8-print: 1.0, pyflakes: 0.6.1)
 
 
-To Fix
+To Cover
 ------------
 
 Cover multline comments and doc strings.
