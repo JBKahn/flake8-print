@@ -1,25 +1,33 @@
-import pep8
-import re
+import ast
 
-__version__ = '1.2.1'
+__version__ = '1.3.0'
 
-PRINT_REGEX = re.compile(r'(print)')
 PRINT_ERROR_CODE = 'T001'
 PRINT_ERROR_MESSAGE = 'print statement found.'
 
 
-def check_for_print_statements(physical_line):
-    if pep8.noqa(physical_line):
-        return
-    physical_line = re.sub(r'\"\"\"(.+?)\"\"\"', "", physical_line)
-    physical_line = re.sub(r'\"(.+?)\"', "", physical_line)
-    physical_line = re.sub(r'\'\'\'(.+?)\'\'\'', "", physical_line)
-    physical_line = re.sub(r'\'(.+?)\'', "", physical_line)
-    physical_line = re.sub(r'#(.+)', "#", physical_line)
-    match = PRINT_REGEX.search(physical_line)
-    if match:
-        return match.start(), '{} {}'.format(PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE)
+class PrintStatementChecker(object):
+    name = 'flake8-print'
+    version = __version__
+
+    def __init__(self, tree, filename='(none)', builtins=None):
+        self.tree = tree
+        self.filename = filename
+
+    def run(self):
+        errors = list()
+        with open(self.filename, 'r') as handle:
+            errors = check_for_print_statements(handle.read(), self.filename)
+
+        for error in errors:
+            yield (error.line, 0, error.message, type(self))
 
 
-check_for_print_statements.name = name = 'flake8-print'
-check_for_print_statements.version = __version__
+def check_for_print_statements(code, filename):
+    errors = []
+    parsed = ast.parse(code)
+    for node in ast.walk(parsed):
+        if isinstance(node, ast.Print):
+            print node.values[0].__dict__
+            errors.append('{}:{}:{} {} {}'.format(filename, node.lineno, node.col_offset, PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE))
+    return errors

@@ -1,7 +1,7 @@
 Flake8 print plugin
 ==================
 
-Check for Print statements in python files. Currently gives false positives of doc strings and mult line strings. Lots of work to do.
+Check for Print statements in python files. Currently does not support noqa comments.
 
 This module provides a plugin for ``flake8``, the Python code checker.
 
@@ -33,6 +33,11 @@ Cover multline comments and doc strings.
 
 Changes
 -------
+
+1.3 - 2014-09-27
+````````````````
+* Dropped noqa support
+* Support for multiline comments and less false positives
 
 1.2 - 2014-06-30
 ````````````````

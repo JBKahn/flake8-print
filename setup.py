@@ -36,7 +36,7 @@ setup(
     zip_safe=False,
     entry_points={
         'flake8.extension': [
-            'flake8_print = flake8_print:check_for_print_statements',
+            'flake8_print = flake8_print:PrintStatementChecker',
         ],
     },
     install_requires=install_requires,
