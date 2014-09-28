@@ -12,21 +12,22 @@ class PrintStatementChecker(object):
 
     def __init__(self, tree, filename='(none)', builtins=None):
         self.tree = tree
-        self.filename = filename
 
     def run(self):
-        errors = list()
-        with open(self.filename, 'r') as handle:
-            errors = check_for_print_statements(handle.read(), self.filename)
+        errors = check_tree_for_print_statements(self.tree)
 
         for error in errors:
             yield (error.get("line"), error.get("col"), error.get("message"), type(self))
 
 
-def check_for_print_statements(code, filename):
+def check_code_for_print_statements(code):
+    tree = ast.parse(code)
+    return check_tree_for_print_statements(tree)
+
+
+def check_tree_for_print_statements(tree):
     errors = []
-    parsed = ast.parse(code)
-    for node in ast.walk(parsed):
+    for node in ast.walk(tree):
         if isinstance(node, ast.Print):
             errors.append({
                 "message": '{} {}'.format(PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE),
