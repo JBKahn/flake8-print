@@ -15,11 +15,11 @@ class TestGenericCases(Flake8PrintTestCases):
 
     def test_catches_simple_print_python2(self):
         result = check_for_print_statements('print 4', 'test.py')
-        assert_equal(result, self.generate_error_statement(1, 0))
+        assert_equal(result, [{'col': 0, 'line': 1, 'message': 'T001 print statement found.'}])
 
     def test_catches_simple_print_python3(self):
         result = check_for_print_statements('print(4)', 'test.py')
-        assert_equal(result, self.generate_error_statement(1, 0))
+        assert_equal(result, [{'col': 0, 'line': 1, 'message': 'T001 print statement found.'}])
 
 
 class TestComments(Flake8PrintTestCases):
@@ -29,7 +29,7 @@ class TestComments(Flake8PrintTestCases):
 
     def test_print_same_line_as_comment(self):
         result = check_for_print_statements('print 5 # what should I do with 5 ?', 'test.py')
-        assert_equal(result, self.generate_error_statement(1, 0))
+        assert_equal(result, [{'col': 0, 'line': 1, 'message': 'T001 print statement found.'}])
 
 
 class TestSingleQuotes(Flake8PrintTestCases):

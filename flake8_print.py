@@ -20,7 +20,7 @@ class PrintStatementChecker(object):
             errors = check_for_print_statements(handle.read(), self.filename)
 
         for error in errors:
-            yield (error.line, 0, error.message, type(self))
+            yield (error.get("line"), error.get("col"), error.get("message"), type(self))
 
 
 def check_for_print_statements(code, filename):
@@ -28,6 +28,9 @@ def check_for_print_statements(code, filename):
     parsed = ast.parse(code)
     for node in ast.walk(parsed):
         if isinstance(node, ast.Print):
-            print node.values[0].__dict__
-            errors.append('{}:{}:{} {} {}'.format(filename, node.lineno, node.col_offset, PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE))
+            errors.append({
+                "message": '{} {}'.format(PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE),
+                "line": node.lineno,
+                "col": node.col_offset
+            })
     return errors
