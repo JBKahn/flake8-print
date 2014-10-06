@@ -3,7 +3,7 @@ import tokenize
 
 from sys import stdin
 
-__version__ = '1.3.0'
+__version__ = '1.4.0'
 
 PRINT_ERROR_CODE = 'T001'
 PRINT_ERROR_MESSAGE = 'print statement found.'
