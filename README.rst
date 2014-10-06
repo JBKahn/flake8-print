@@ -24,9 +24,18 @@ available in ``flake8``::
     $ flake8 --version
     2.0 (pep8: 1.4.5, flake8-print: 1.0, pyflakes: 0.6.1)
 
+Stdin
+-----
+
+Testing with `flake8==2.2.1`, unsure why it isn't working with newer versions.
+
 
 Changes
 -------
+
+1.4 - 2014-10-06
+````````````````
+* Apped noqa support
 
 1.3 - 2014-09-27
 ````````````````
