@@ -32,7 +32,7 @@ class PrintStatementChecker(object):
 
 def get_noqa_lines(code):
         tokens = tokenize.generate_tokens(lambda L=iter(code): next(L))
-        noqa = [token[2][0] for token in tokens if token[0] == tokenize.COMMENT and token[1].endswith('noqa')]
+        noqa = [token[2][0] for token in tokens if token[0] == tokenize.COMMENT and (token[1].endswith('noqa') or token[0].endswith('noqa'))]
         return noqa
 
 
