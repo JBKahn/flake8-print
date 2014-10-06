@@ -8,10 +8,13 @@ class Flake8PrintTestCases(object):
 
 
 class TestGenericCases(Flake8PrintTestCases):
-    # dropped till I find something better
-    # def test_skips_noqa(self):
-    #     result = check_code_for_print_statements('print 4 # noqa')
-    #     assert_equal(result, list())
+    def test_skips_noqa(self):
+        result = check_code_for_print_statements('print 4 # noqa')
+        assert_equal(result, list())
+
+    def test_skips_noqa_line_only(self):
+        result = check_code_for_print_statements('print 4 # noqa\nprint 5\n # noqa')
+        assert_equal(result, [{'col': 0, 'line': 2, 'message': 'T001 print statement found.'}])
 
     def test_catches_simple_print_python2(self):
         result = check_code_for_print_statements('print 4')
