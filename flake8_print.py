@@ -47,7 +47,7 @@ def check_tree_for_print_statements(tree, noqa):
     for node in ast.walk(tree):
         if isinstance(node, ast.Print) and node.lineno not in noqa:
             errors.append({
-                "message": '{} {}'.format(PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE),
+                "message": '{0} {1}'.format(PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE),
                 "line": node.lineno,
                 "col": node.col_offset
             })
