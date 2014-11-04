@@ -1,7 +1,7 @@
 Flake8 print plugin
 ==================
 
-Check for Print statements in python files. Currently does not support noqa comments.
+Check for Print statements in python files.
 
 This module provides a plugin for ``flake8``, the Python code checker.
 
@@ -27,11 +27,15 @@ available in ``flake8``::
 Stdin
 -----
 
-Testing with `flake8==2.2.1`, unsure why it isn't working with newer versions.
+Testing with `flake8==2.2.1`, and `2.2.4`. There was a bug in flake8 that was subsequently fixed.
 
 
 Changes
 -------
+
+1.5 - 2014-11-04
+````````````````
+* Added python2.6 support. Thanks @zoidbergwill
 
 1.4 - 2014-10-06
 ````````````````
