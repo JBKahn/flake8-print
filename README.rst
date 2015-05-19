@@ -33,6 +33,10 @@ Testing with `flake8==2.2.1`, and `2.2.4`. There was a bug in flake8 that was su
 Changes
 -------
 
+1.6 - 2015-05-18
+````````````````
+* Added proper support for python3 and testing for python 2.6, 2.7 and 3.4
+
 1.5 - 2014-11-04
 ````````````````
 * Added python2.6 support. Thanks @zoidbergwill
