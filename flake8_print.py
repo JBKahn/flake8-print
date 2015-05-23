@@ -3,7 +3,7 @@ import tokenize
 
 from sys import stdin
 
-__version__ = '1.6.0'
+__version__ = '1.6.1'
 
 PRINT_ERROR_CODE = 'T001'
 PRINT_ERROR_MESSAGE = 'print statement found.'
@@ -45,7 +45,7 @@ def check_code_for_print_statements(code):
 def check_tree_for_print_statements(tree, noqa):
     errors = []
     for node in ast.walk(tree):
-        if ((isinstance(node, ast.Call) and node.func.id == 'print') or (hasattr(ast, 'Print') and isinstance(node, ast.Print) and node.lineno not in noqa)) and node.lineno not in noqa:
+        if ((isinstance(node, ast.Call) and getattr(node.func, 'id', None) == 'print') or (hasattr(ast, 'Print') and isinstance(node, ast.Print) and node.lineno not in noqa)) and node.lineno not in noqa:
             errors.append({
                 "message": '{0} {1}'.format(PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE),
                 "line": node.lineno,
