@@ -1,54 +1,31 @@
-import ast
-import tokenize
+"""Extension for flake8 that finds usage of print."""
+import re
 
-from sys import stdin
-
-__version__ = '1.6.1'
+__version__ = '2.0.0'
 
 PRINT_ERROR_CODE = 'T001'
 PRINT_ERROR_MESSAGE = 'print statement found.'
 
-
-class PrintStatementChecker(object):
-    name = 'flake8-print'
-    version = __version__
-
-    def __init__(self, tree, filename='(none)', builtins=None):
-        self.tree = tree
-        self.filename = (filename == 'stdin' and stdin) or filename
-
-    def run(self):
-        if self.filename == stdin:
-            noqa = get_noqa_lines(self.filename)
-        else:
-            with open(self.filename, 'r') as file_to_check:
-                noqa = get_noqa_lines(file_to_check.readlines())
-
-        errors = check_tree_for_print_statements(self.tree, noqa)
-
-        for error in errors:
-            yield (error.get("line"), error.get("col"), error.get("message"), type(self))
+RE_PRINT_STATEMENT = re.compile(r"(?<![=\s])\s*\bprint\b\s+[^(=]")
+RE_PRINT_FUNCTION = re.compile(r"(?<!def\s)\bprint\b\s*\([^)]*\)")
+RE_PRINT_NAME = re.compile(r"\bprint\b")
 
 
-def get_noqa_lines(code):
-    tokens = tokenize.generate_tokens(lambda L=iter(code): next(L))
-    noqa = [token[2][0] for token in tokens if token[0] == tokenize.COMMENT and (token[1].endswith('noqa') or (isinstance(token[0], str) and token[0].endswith('noqa')))]
-    return noqa
+def print_usage(logical_line, noqa=None):
+    if noqa:
+        return
+    m = RE_PRINT_STATEMENT.search(logical_line)
+    if m:
+        yield m.start(), '{0} {1}'.format(
+            PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE)
+        return
 
+    m = RE_PRINT_FUNCTION.search(logical_line)
+    if m:
+        yield m.start(), '{0} {1}'.format(
+            PRINT_ERROR_CODE, 'print function found.')
+        return
 
-def check_code_for_print_statements(code):
-    tree = ast.parse(code)
-    noqa = get_noqa_lines(code.split("\n"))
-    return check_tree_for_print_statements(tree, noqa)
-
-
-def check_tree_for_print_statements(tree, noqa):
-    errors = []
-    for node in ast.walk(tree):
-        if ((isinstance(node, ast.Call) and getattr(node.func, 'id', None) == 'print') or (hasattr(ast, 'Print') and isinstance(node, ast.Print) and node.lineno not in noqa)) and node.lineno not in noqa:
-            errors.append({
-                "message": '{0} {1}'.format(PRINT_ERROR_CODE, PRINT_ERROR_MESSAGE),
-                "line": node.lineno,
-                "col": node.col_offset
-            })
-    return errors
+    m = RE_PRINT_NAME.search(logical_line)
+    if m:
+        yield m.start(), 'T101 Python 2.x reserved word print used.'

@@ -18,20 +18,23 @@ You can install or upgrade ``flake8-print`` with these commands::
 Plugin for Flake8
 -----------------
 
-When both ``flake8 2.2`` and ``flake8-print`` are installed, the plugin is
+When both ``flake8 2.4.1`` and ``flake8-print`` are installed, the plugin is
 available in ``flake8``::
 
     $ flake8 --version
-    2.0 (pep8: 1.4.5, flake8-print: 1.0, pyflakes: 0.6.1)
-
-Stdin
------
-
-Testing with `flake8==2.2.1`, and `2.2.4`. There was a bug in flake8 that was subsequently fixed.
+    2.4.1 (pep8: 1.5.7, flake8-print: 2.0.0, mccabe: 0.3.1, pyflakes: 0.8.1)
 
 
 Changes
 -------
+
+2.0 - 2015-11-10
+````````````````
+* Support noqa at end of multiline print statement
+* Performance improvements
+* Removed PrintStatementChecker class and other functions
+* Added T101 for 'Python 2.x reserved word print used.'
+* Added testing for Python 3.3 and 3.5, and different flake8 versions
 
 1.6.1 - 2015-05-22
 ````````````````
