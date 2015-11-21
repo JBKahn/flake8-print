@@ -28,6 +28,10 @@ available in ``flake8``::
 Changes
 -------
 
+2.0.1 - 2015-11-21
+````````````````
+* Add back the decorator to fix the `flake8 --version` call.
+
 2.0 - 2015-11-10
 ````````````````
 * Support noqa at end of multiline print statement
