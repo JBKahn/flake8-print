@@ -1,7 +1,7 @@
 """Extension for flake8 that finds usage of print."""
 import re
 
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 
 PRINT_ERROR_CODE = 'T001'
 PRINT_ERROR_MESSAGE = 'print statement found.'
