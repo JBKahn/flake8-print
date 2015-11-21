@@ -11,6 +11,14 @@ RE_PRINT_FUNCTION = re.compile(r"(?<!def\s)\bprint\b\s*\([^)]*\)")
 RE_PRINT_NAME = re.compile(r"\bprint\b")
 
 
+def flake8ext(f):
+    """Decorate flake8 extension function."""
+    f.name = 'flake8-print'
+    f.version = __version__
+    return f
+
+
+@flake8ext
 def print_usage(logical_line, noqa=None):
     if noqa:
         return
