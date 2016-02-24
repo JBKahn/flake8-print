@@ -1,5 +1,5 @@
 Flake8 print plugin
-==================
+===================
 
 Check for Print statements in python files.
 
@@ -29,7 +29,7 @@ Changes
 -------
 
 2.0.1 - 2015-11-21
-````````````````
+``````````````````
 * Add back the decorator to fix the `flake8 --version` call.
 
 2.0 - 2015-11-10
@@ -41,7 +41,7 @@ Changes
 * Added testing for Python 3.3 and 3.5, and different flake8 versions
 
 1.6.1 - 2015-05-22
-````````````````
+``````````````````
 * Fix bug introduced in 1.6.
 
 1.6 - 2015-05-18
