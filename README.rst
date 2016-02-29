@@ -28,6 +28,12 @@ available in ``flake8``::
 Changes
 -------
 
+2.0.2 - 2016-02-29
+``````````````````
+* Fix ReadMe for pipy
+* Refactor, DRY it up.
+* Update python 2 vs python 3 print statement styles.
+
 2.0.1 - 2015-11-21
 ``````````````````
 * Add back the decorator to fix the `flake8 --version` call.
