@@ -1,7 +1,7 @@
 """Extension for flake8 that finds usage of print."""
 import re
 
-__version__ = '2.0.1'
+__version__ = '2.0.2'
 
 CHECKS = [
     (re.compile(r"(?<![=\s])\s*\bprint\b\s+[^(=]"), 'T001', 'print statement found.'),
