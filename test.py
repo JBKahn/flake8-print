@@ -92,8 +92,8 @@ else:
         return noop
 
 
-T001s = 'T001 print statement found.'
-T001f = 'T001 print function found.'
+T001 = 'T001 print statement found.'
+T003 = 'T003 print function found.'
 T101 = 'T101 Python 2.x reserved word print used.'
 
 
@@ -132,7 +132,7 @@ class TestNoQA(Flake8PrintTestCases):
     @skip_if_noqa_unsupported()
     def test_skips_noqa_line_only(self):
         result = check_code_for_print_statements('print(4); # noqa\nprint(5)\n # noqa')
-        assert_equal(result, [{'col': 0, 'line': 2, 'message': T001f}])
+        assert_equal(result, [{'col': 0, 'line': 2, 'message': T003}])
 
 
 class TestGenericCases(Flake8PrintTestCases):
@@ -142,11 +142,11 @@ class TestGenericCases(Flake8PrintTestCases):
             print("a"
                   "b")
         """))
-        assert_equal(result, [{'col': 0, 'line': 2, 'message': T001f}])
+        assert_equal(result, [{'col': 0, 'line': 2, 'message': T003}])
 
     def test_catches_simple_print_python2(self):
         result = check_code_for_print_statements('print 4')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T001s}])
+        assert_equal(result, [{'col': 0, 'line': 1, 'message': T001}])
 
     def test_catches_empty_print_python2(self):
         # TODO: This depends on __future__.print_function
@@ -156,19 +156,19 @@ class TestGenericCases(Flake8PrintTestCases):
 
     def test_catches_simple_print_python3(self):
         result = check_code_for_print_statements('print(4)')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T001f}])
+        assert_equal(result, [{'col': 0, 'line': 1, 'message': T003}])
 
     def test_catches_print_multiline(self):
         result = check_code_for_print_statements('print(0\n)')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T001f}])
+        assert_equal(result, [{'col': 0, 'line': 1, 'message': T003}])
 
     def test_catches_empty_print(self):
         result = check_code_for_print_statements('print(\n)')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T001f}])
+        assert_equal(result, [{'col': 0, 'line': 1, 'message': T003}])
 
     def test_catches_print_invocation_in_lambda(self):
         result = check_code_for_print_statements('x = lambda a: print(a)')
-        assert_equal(result, [{'col': 14, 'line': 1, 'message': T001f}])
+        assert_equal(result, [{'col': 14, 'line': 1, 'message': T003}])
 
 
 class TestComments(Flake8PrintTestCases):
@@ -178,7 +178,7 @@ class TestComments(Flake8PrintTestCases):
 
     def test_print_same_line_as_comment(self):
         result = check_code_for_print_statements('print(5) # what should I do with 5 ?')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T001f}])
+        assert_equal(result, [{'col': 0, 'line': 1, 'message': T003}])
 
 
 class TestSingleQuotes(Flake8PrintTestCases):
