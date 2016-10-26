@@ -1,11 +1,7 @@
 import functools
+import pycodestyle
 
 from textwrap import dedent
-
-try:
-    from flake8 import pep8
-except ImportError:
-    import pep8
 
 from flake8_print import print_usage
 
@@ -17,7 +13,7 @@ except ImportError:
 from nose.tools import assert_equal
 
 
-class CaptureReport(pep8.BaseReport):
+class CaptureReport(pycodestyle.BaseReport):
     """Collect the results of the checks."""
 
     def __init__(self, options):
@@ -38,7 +34,7 @@ class CaptureReport(pep8.BaseReport):
         return code
 
 
-class PrintTestStyleGuide(pep8.StyleGuide):
+class PrintTestStyleGuide(pycodestyle.StyleGuide):
 
     logical_checks = [
         ('print_usage', print_usage, ['logical_line', 'noqa']),
@@ -53,7 +49,7 @@ class PrintTestStyleGuide(pep8.StyleGuide):
 
 _print_test_style = PrintTestStyleGuide()
 
-noqa_supported = hasattr(pep8, 'noqa')
+noqa_supported = hasattr(pycodestyle, 'noqa')
 
 if not noqa_supported:
     # remove noqa
@@ -62,10 +58,10 @@ if not noqa_supported:
 
 
 def check_code_for_print_statements(code):
-    """Process code using pep8 Checker and return all errors."""
+    """Process code using pycodestyle Checker and return all errors."""
     report = CaptureReport(options=_print_test_style)
     lines = [line + '\n' for line in code.split('\n')]
-    checker = pep8.Checker(filename=None, lines=lines,
+    checker = pycodestyle.Checker(filename=None, lines=lines,
                            options=_print_test_style, report=report)
 
     checker.check_all()
