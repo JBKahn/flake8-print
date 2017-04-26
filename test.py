@@ -90,6 +90,7 @@ else:
 
 T001 = 'T001 print statement found.'
 T003 = 'T003 print function found.'
+T004 = 'T004 pprint function found.'
 T101 = 'T101 Python 2.x reserved word print used.'
 
 
@@ -153,6 +154,10 @@ class TestGenericCases(Flake8PrintTestCases):
     def test_catches_simple_print_python3(self):
         result = check_code_for_print_statements('print(4)')
         assert_equal(result, [{'col': 0, 'line': 1, 'message': T003}])
+
+    def test_catches_pprint(self):
+        result = check_code_for_print_statements('pprint(4)')
+        assert_equal(result, [{'col': 0, 'line': 1, 'message': T004}])
 
     def test_catches_print_multiline(self):
         result = check_code_for_print_statements('print(0\n)')
@@ -257,3 +262,25 @@ class TestPython3NameFalsePositive(Flake8PrintTestCases):
     def test_print_in_lambda(self):
         result = check_code_for_print_statements('x = lambda a: print')
         assert_equal(result, [{'col': 14, 'line': 1, 'message': T101}])
+
+
+class TestPprintCases(Flake8PrintTestCases):
+    def test_pprint_module_ignored(self):
+        result = check_code_for_print_statements('import pprint;')
+        assert_equal(result, list())
+
+    def test_pprint_function_ignored(self):
+        result = check_code_for_print_statements('import pprint; pprint.pprint;')
+        assert_equal(result, list())
+
+    def test_pprint_function_call_detected(self):
+        result = check_code_for_print_statements('import pprint; pprint.pprint("foo");')
+        assert_equal(result, [{'col': 22, 'line': 1, 'message': T004}])
+
+    def test_pprint_standalone_function_call_detected(self):
+        result = check_code_for_print_statements('from pprint import pprint; pprint("foo");')
+        assert_equal(result, [{'col': 27, 'line': 1, 'message': T004}])
+
+    def test_pprint_function_call_with_complex_data(self):
+        result = check_code_for_print_statements('import pprint; pprint.pprint({"foo": "print"});')
+        assert_equal(result, [{'col': 22, 'line': 1, 'message': T004}])

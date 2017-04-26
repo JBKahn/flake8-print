@@ -6,7 +6,8 @@ __version__ = '2.0.2'
 CHECKS = [
     (re.compile(r"(?<![=\s])\s*\bprint\b\s+[^(=]"), 'T001', 'print statement found.'),
     (re.compile(r"(?<!def\s)\bprint\b\s*\([^)]*\)"), 'T003', 'print function found.'),
-    (re.compile(r"\bprint\b"), 'T101', 'Python 2.x reserved word print used.')
+    (re.compile(r"\bprint\b"), 'T101', 'Python 2.x reserved word print used.'),
+    (re.compile(r"(?<!def\s)\bpprint\b\s*\([^)]*\)"), 'T004', 'pprint function found.'),
 ]
 
 
