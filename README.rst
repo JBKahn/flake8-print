@@ -28,6 +28,13 @@ available in ``flake8``::
 Changes
 -------
 
+3.0.0 - todo
+``````````````````
+* Remove some of the python 2/3 message differentiation.
+* Use an AST rather than a logical line checker with a regex.
+* Still fiddling and trying to restore the multiline lost so far.
+
+
 2.0.2 - 2016-02-29
 ``````````````````
 * Fix ReadMe for pipy
