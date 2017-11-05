@@ -28,6 +28,14 @@ available in ``flake8``::
 Changes
 -------
 
+3.0.0 - 2017-11-05
+``````````````````
+* Remove some of the python 2/3 message differentiation.
+* Use an AST rather than a logical line checker with a regex.
+* pprint support.
+* Loss of multiline noqa support, until there is a way to use both the AST and have flake8 provide the noqa lines.
+
+
 2.0.2 - 2016-02-29
 ``````````````````
 * Fix ReadMe for pipy

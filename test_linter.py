@@ -1,16 +1,12 @@
-import functools
 import pycodestyle
 
 from textwrap import dedent
 
-from flake8_print import print_usage
+from flake8_print import PrintChecker
 
-try:
-    from unittest import skipIf
-except ImportError:
-    skipIf = None
-
-from nose.tools import assert_equal
+import pytest
+from six import PY2, PY3
+import sys
 
 
 class CaptureReport(pycodestyle.BaseReport):
@@ -36,11 +32,9 @@ class CaptureReport(pycodestyle.BaseReport):
 
 class PrintTestStyleGuide(pycodestyle.StyleGuide):
 
-    logical_checks = [
-        ('print_usage', print_usage, ['logical_line', 'noqa']),
-    ]
+    logical_checks = []
     physical_checks = []
-    ast_checks = []
+    ast_checks = [('print_usage', PrintChecker, ["tree", "filename", "lines"])]
     max_line_length = None
     hang_closing = False
     verbose = False
@@ -49,211 +43,225 @@ class PrintTestStyleGuide(pycodestyle.StyleGuide):
 
 _print_test_style = PrintTestStyleGuide()
 
-noqa_supported = hasattr(pycodestyle, 'noqa')
-
-if not noqa_supported:
-    # remove noqa
-    _print_test_style.logical_checks[0] = (
-        'print_usage', print_usage, ['logical_line'])
-
 
 def check_code_for_print_statements(code):
     """Process code using pycodestyle Checker and return all errors."""
+    from tempfile import NamedTemporaryFile
+
+    test_file = NamedTemporaryFile(delete=False)
+    test_file.write(code.encode())
+    test_file.flush()
     report = CaptureReport(options=_print_test_style)
     lines = [line + '\n' for line in code.split('\n')]
-    checker = pycodestyle.Checker(filename=None, lines=lines,
-                           options=_print_test_style, report=report)
+    checker = pycodestyle.Checker(filename=test_file.name, lines=lines, options=_print_test_style, report=report)
 
     checker.check_all()
     return report._results
 
 
-class Flake8PrintTestCases(object):
-    pass
-
-
-if skipIf:
-    skip_if_noqa_unsupported = functools.partial(
-        skipIf,
-        condition=not noqa_supported,
-        reason='noqa is not supported on this flake8 version')
-else:
-    # Python 2.6 does not have skipIf or SkipTest, so
-    # completely skip the test which will be reported as success.
-    def skip_if_noqa_unsupported():
-        """Decorator to unconditionally skip test method."""
-        def noop(*args, **kwargs):
-            pass
-
-        return noop
-
-
-T001 = 'T001 print statement found.'
-T003 = 'T003 print function found.'
+T001 = 'T001 print found.'
+T003 = 'T003 pprint found.'
 T101 = 'T101 Python 2.x reserved word print used.'
+T103 = 'T103 pprint declared.'
 
 
-class TestNoQA(Flake8PrintTestCases):
+class TestNoQA(object):
 
-    @skip_if_noqa_unsupported()
+    @pytest.mark.skipif(sys.version_info < (2, 7), reason="Python 2.6 does not support noqa")
     def test_skips_noqa(self):
         result = check_code_for_print_statements('print(4) # noqa')
-        assert_equal(result, list())
+        assert result == list()
 
-    @skip_if_noqa_unsupported()
+    @pytest.mark.skipif(True, reason="no idea how to get this to work without local line")
     def test_skips_noqa_multiline_end(self):
         result = check_code_for_print_statements(dedent("""
             print("a"
                   "b")  # noqa
         """))
-        assert_equal(result, list())
+        assert result == list()
 
-    @skip_if_noqa_unsupported()
+    @pytest.mark.skipif(True, reason="no idea how to get this to work without local line")
     def test_skips_noqa_multiline_middle(self):
         result = check_code_for_print_statements(dedent("""
             print("a"
                   "b"  # noqa
                   "c")
         """))
-        assert_equal(result, list())
+        assert result == list()
 
-    @skip_if_noqa_unsupported()
+    @pytest.mark.skipif(sys.version_info < (2, 7), reason="Python 2.6 does not support noqa")
     def test_skips_noqa_multiline_start(self):
         result = check_code_for_print_statements(dedent("""
-            print("a"  # noqa
-                  "b")
+            print("a"  # noqa\n
+                  "b")\n
+            x = 4\n
+            y = 7\n
         """))
-        assert_equal(result, list())
+        assert result == list()
 
-    @skip_if_noqa_unsupported()
+    @pytest.mark.skipif(sys.version_info < (2, 7), reason="Python 2.6 does not support noqa")
     def test_skips_noqa_line_only(self):
         result = check_code_for_print_statements('print(4); # noqa\nprint(5)\n # noqa')
-        assert_equal(result, [{'col': 0, 'line': 2, 'message': T003}])
+        assert result == [{'col': 0, 'line': 2, 'message': T001}]
 
 
-class TestGenericCases(Flake8PrintTestCases):
+class TestGenericCases(object):
 
     def test_catches_multiline_print(self):
         result = check_code_for_print_statements(dedent("""
             print("a"
                   "b")
         """))
-        assert_equal(result, [{'col': 0, 'line': 2, 'message': T003}])
+        assert result == [{'col': 0, 'line': 2, 'message': T001}]
 
+    @pytest.mark.skipif(PY3, reason="requires python2")
     def test_catches_simple_print_python2(self):
         result = check_code_for_print_statements('print 4')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T001}])
+        assert result == [{'col': 0, 'line': 1, 'message': T001}]
 
+    @pytest.mark.skipif(PY3, reason="requires python2")
     def test_catches_empty_print_python2(self):
-        # TODO: This depends on __future__.print_function
-        # as it can be either a print statement or unused function reference.
-        result = check_code_for_print_statements('print')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T101}])
+        result = check_code_for_print_statements('from __future__ import print_function\nprint')
+        assert result == [{'col': 0, 'line': 2, 'message': T101}]
 
     def test_catches_simple_print_python3(self):
         result = check_code_for_print_statements('print(4)')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T003}])
+        assert result == [{'col': 0, 'line': 1, 'message': T001}]
+
+    def test_catches_pprint(self):
+        result = check_code_for_print_statements('pprint(4)')
+        assert result == [{'col': 0, 'line': 1, 'message': T003}]
 
     def test_catches_print_multiline(self):
         result = check_code_for_print_statements('print(0\n)')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T003}])
+        assert result == [{'col': 0, 'line': 1, 'message': T001}]
 
     def test_catches_empty_print(self):
         result = check_code_for_print_statements('print(\n)')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T003}])
+        assert result == [{'col': 0, 'line': 1, 'message': T001}]
 
+    @pytest.mark.skipif(PY2, reason="requires python3")
     def test_catches_print_invocation_in_lambda(self):
         result = check_code_for_print_statements('x = lambda a: print(a)')
-        assert_equal(result, [{'col': 14, 'line': 1, 'message': T003}])
+        assert result == [{'col': 14, 'line': 1, 'message': T001}]
 
 
-class TestComments(Flake8PrintTestCases):
+class TestComments(object):
     def test_print_in_inline_comment_is_not_a_false_positive(self):
         result = check_code_for_print_statements('# what should I print ?')
-        assert_equal(result, list())
+        assert result == list()
 
     def test_print_same_line_as_comment(self):
         result = check_code_for_print_statements('print(5) # what should I do with 5 ?')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T003}])
+        assert result == [{'col': 0, 'line': 1, 'message': T001}]
 
 
-class TestSingleQuotes(Flake8PrintTestCases):
+class TestSingleQuotes(object):
     def test_print_in_one_single_quote_single_line_string_not_false_positive(self):
         result = check_code_for_print_statements('a(\'print the things\', 25)')
-        assert_equal(result, list())
+        assert result == list()
 
     def test_print_in_three_single_quote_single_line_string_not_false_positive(self):
         result = check_code_for_print_statements('a(\'\'\'print the things\'\'\', 25)')
-        assert_equal(result, list())
+        assert result == list()
 
 
-class TestDoubleQuotes(Flake8PrintTestCases):
+class TestDoubleQuotes(object):
     def test_print_in_one_double_quote_single_line_string_not_false_positive(self):
         result = check_code_for_print_statements('a("print the things", 25)')
-        assert_equal(result, list())
+        assert result == list()
 
     def test_print_in_three_double_quote_single_line_string_not_false_positive(self):
         result = check_code_for_print_statements('a("""print the things""", 25)')
-        assert_equal(result, list())
+        assert result == list()
 
 
-class TestMultilineFalsePositive(Flake8PrintTestCases):
+class TestMultilineFalsePositive(object):
     def test_print_in_one_double_quote_single_line_string_not_false_positive(self):
         result = check_code_for_print_statements('hello="""there is a \nprint on\n the next line"""')
-        assert_equal(result, list())
+        assert result == list()
 
     def test_print_in_three_double_quote_single_line_string_not_false_positive(self):
         result = check_code_for_print_statements('a("""print the things""", 25)')
-        assert_equal(result, list())
+        assert result == list()
 
 
-class TestNameFalsePositive(Flake8PrintTestCases):
+class TestNameFalsePositive(object):
 
+    @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_in_name(self):
         result = check_code_for_print_statements('def print_foo(): pass')
-        assert_equal(result, [])
+        assert result == []
         result = check_code_for_print_statements('def foo_print(): pass')
-        assert_equal(result, [])
+        assert result == []
         result = check_code_for_print_statements('foo_print = 1')
-        assert_equal(result, [])
+        assert result == []
         result = check_code_for_print_statements('print_foo = 1')
-        assert_equal(result, [])
+        assert result == []
 
-
-class TestPython3NameFalsePositive(Flake8PrintTestCases):
+    @pytest.mark.skipif(PY2, reason="requires python3")
     def test_redefine_print_function(self):
         result = check_code_for_print_statements('def print(): pass')
-        assert_equal(result, [{'col': 4, 'line': 1, 'message': T101}])
+        assert result == [{'col': 0, 'line': 1, 'message': T101}]
 
-    def test_print_method(self):
-        result = check_code_for_print_statements(
-            'class Foo: def print(self): pass')
-        assert_equal(result, [{'col': 15, 'line': 1, 'message': T101}])
-
+    @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_arg(self):
         result = check_code_for_print_statements('def foo(print): pass')
-        assert_equal(result, [{'col': 8, 'line': 1, 'message': T101}])
+        assert result == [{'col': 0, 'line': 1, 'message': T101}]
 
+        result = check_code_for_print_statements('def foo(*, print=3): pass')
+        assert result == [{'col': 0, 'line': 1, 'message': T101}]
+
+        result = check_code_for_print_statements('def foo(print=3): pass')
+        assert result == [{'col': 0, 'line': 1, 'message': T101}]
+
+    @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_assignment(self):
         result = check_code_for_print_statements('print=1')
-        assert_equal(result, [{'col': 0, 'line': 1, 'message': T101}])
+        assert result == [{'col': 0, 'line': 1, 'message': T101}]
 
+    @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_assignment_value(self):
         result = check_code_for_print_statements('x = print')
-        assert_equal(result, [{'col': 4, 'line': 1, 'message': T101}])
+        assert result == [{'col': 4, 'line': 1, 'message': T101}]
 
+    @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_assignment_value_else(self):
         result = check_code_for_print_statements('x = print if True else 1')
-        assert_equal(result, [{'col': 4, 'line': 1, 'message': T101}])
+        assert result == [{'col': 4, 'line': 1, 'message': T101}]
         result = check_code_for_print_statements('x = 1 if True else print')
-        assert_equal(result, [{'col': 19, 'line': 1, 'message': T101}])
+        assert result == [{'col': 19, 'line': 1, 'message': T101}]
 
+    @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_assignment_value_or(self):
         result = check_code_for_print_statements('x = print or 1')
-        assert_equal(result, [{'col': 4, 'line': 1, 'message': T101}])
+        assert result == [{'col': 4, 'line': 1, 'message': T101}]
         result = check_code_for_print_statements('x = 1 or print')
-        assert_equal(result, [{'col': 9, 'line': 1, 'message': T101}])
+        assert result == [{'col': 9, 'line': 1, 'message': T101}]
 
+    @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_in_lambda(self):
         result = check_code_for_print_statements('x = lambda a: print')
-        assert_equal(result, [{'col': 14, 'line': 1, 'message': T101}])
+        assert result == [{'col': 14, 'line': 1, 'message': T101}]
+
+
+class TestPprintCases(object):
+    def test_pprint_module_ignored(self):
+        result = check_code_for_print_statements('import pprint;')
+        assert result == list()
+
+    def test_pprint_function_ignored(self):
+        result = check_code_for_print_statements('import pprint; pprint.pprint;')
+        assert result == list()
+
+    def test_pprint_function_call_detected(self):
+        result = check_code_for_print_statements('import pprint; pprint.pprint("foo");')
+        assert result == [{'col': 15, 'line': 1, 'message': T003}]
+
+    def test_pprint_standalone_function_call_detected(self):
+        result = check_code_for_print_statements('from pprint import pprint; pprint("foo");')
+        assert result == [{'col': 27, 'line': 1, 'message': T003}]
+
+    def test_pprint_function_call_with_complex_data(self):
+        result = check_code_for_print_statements('import pprint; pprint.pprint({"foo": "print"});')
+        assert result == [{'col': 15, 'line': 1, 'message': T003}]
