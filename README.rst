@@ -28,6 +28,11 @@ available in ``flake8``::
 Changes
 -------
 
+3.0.1 - 2017-11-06
+``````````````````
+* Fix conflict in setup.py leaving it off by default again.
+* Fix bug in name code.
+
 3.0.0 - 2017-11-05
 ``````````````````
 * Remove some of the python 2/3 message differentiation.

@@ -3,7 +3,7 @@ import pycodestyle
 import ast
 from six import PY3
 
-__version__ = '3.0.0'
+__version__ = '3.0.1'
 
 PRINT_FUNCTION_NAME = "print"
 PPRINT_FUNCTION_NAME = "pprint"
