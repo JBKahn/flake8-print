@@ -37,7 +37,7 @@ setup(
     zip_safe=False,
     entry_points={
         'flake8.extension': [
-            'T = flake8_print:PrintChecker',
+            'R = flake8_print:PrintChecker',
         ],
     },
     install_requires=install_requires,
