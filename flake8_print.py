@@ -1,7 +1,7 @@
 """Extension for flake8 that finds usage of print."""
 import pycodestyle
 import ast
-from six import PY3
+from six import PY2, PY3
 
 __version__ = '3.0.1'
 
@@ -45,10 +45,15 @@ class PrintFinder(ast.NodeVisitor):
     def visit_FunctionDef(self, node):
         if node.name in PRINT_FUNCTION_NAMES:
             self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][node.name]
-        for arg in node.args.args:
-            if arg.id in PRINT_FUNCTION_NAMES:
-                self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][arg.id]
-        if PY3:
+        if PY2:
+            for arg in node.args.args:
+                if arg.id in PRINT_FUNCTION_NAMES:
+                    self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][arg.id]
+        elif PY3:
+            for arg in node.args.args:
+                if arg.arg in PRINT_FUNCTION_NAMES:
+                    self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][arg.arg]
+
             for arg in node.args.kwonlyargs:
                 if arg.arg in PRINT_FUNCTION_NAMES:
                     self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][arg.arg]
