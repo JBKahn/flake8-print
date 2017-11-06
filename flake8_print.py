@@ -46,12 +46,12 @@ class PrintFinder(ast.NodeVisitor):
         if node.name in PRINT_FUNCTION_NAMES:
             self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][node.name]
         for arg in node.args.args:
-            if arg.arg in PRINT_FUNCTION_NAMES:
-                self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][arg.arg]
+            if arg.name in PRINT_FUNCTION_NAMES:
+                self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][arg.name]
         if PY3:
             for arg in node.args.kwonlyargs:
-                if arg.arg in PRINT_FUNCTION_NAMES:
-                    self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][arg.arg]
+                if arg.name in PRINT_FUNCTION_NAMES:
+                    self.prints_redefined[(node.lineno, node.col_offset)] = VIOLATIONS["declared"][arg.name]
         self.generic_visit(node)
 
     def visit_Name(self, node):
