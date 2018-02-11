@@ -28,6 +28,11 @@ available in ``flake8``::
 Changes
 -------
 
+3.1.0 - 2018-02-11
+``````````````````
+* Add a framework classifier for use in pypi.org
+* Fix entry_point in setup.py leaving it off by default again.
+
 3.0.1 - 2017-11-06
 ``````````````````
 * Fix conflict in setup.py leaving it off by default again.
