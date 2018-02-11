@@ -37,7 +37,7 @@ setup(
     zip_safe=False,
     entry_points={
         'flake8.extension': [
-            'R = flake8_print:PrintChecker',
+            'T00 = flake8_print:PrintChecker',
         ],
     },
     install_requires=install_requires,
@@ -47,6 +47,7 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
+        'Framework :: Flake8',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',

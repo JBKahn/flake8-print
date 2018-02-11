@@ -61,8 +61,8 @@ def check_code_for_print_statements(code):
 
 T001 = 'T001 print found.'
 T003 = 'T003 pprint found.'
-T101 = 'T101 Python 2.x reserved word print used.'
-T103 = 'T103 pprint declared.'
+T002 = 'T002 Python 2.x reserved word print used.'
+T004 = 'T004 pprint declared.'
 
 
 class TestNoQA(object):
@@ -122,7 +122,7 @@ class TestGenericCases(object):
     @pytest.mark.skipif(PY3, reason="requires python2")
     def test_catches_empty_print_python2(self):
         result = check_code_for_print_statements('from __future__ import print_function\nprint')
-        assert result == [{'col': 0, 'line': 2, 'message': T101}]
+        assert result == [{'col': 0, 'line': 2, 'message': T002}]
 
     def test_catches_simple_print_python3(self):
         result = check_code_for_print_statements('print(4)')
@@ -202,47 +202,47 @@ class TestNameFalsePositive(object):
     @pytest.mark.skipif(PY2, reason="requires python3")
     def test_redefine_print_function(self):
         result = check_code_for_print_statements('def print(): pass')
-        assert result == [{'col': 0, 'line': 1, 'message': T101}]
+        assert result == [{'col': 0, 'line': 1, 'message': T002}]
 
     @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_arg(self):
         result = check_code_for_print_statements('def foo(print): pass')
-        assert result == [{'col': 0, 'line': 1, 'message': T101}]
+        assert result == [{'col': 0, 'line': 1, 'message': T002}]
 
         result = check_code_for_print_statements('def foo(*, print=3): pass')
-        assert result == [{'col': 0, 'line': 1, 'message': T101}]
+        assert result == [{'col': 0, 'line': 1, 'message': T002}]
 
         result = check_code_for_print_statements('def foo(print=3): pass')
-        assert result == [{'col': 0, 'line': 1, 'message': T101}]
+        assert result == [{'col': 0, 'line': 1, 'message': T002}]
 
     @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_assignment(self):
         result = check_code_for_print_statements('print=1')
-        assert result == [{'col': 0, 'line': 1, 'message': T101}]
+        assert result == [{'col': 0, 'line': 1, 'message': T002}]
 
     @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_assignment_value(self):
         result = check_code_for_print_statements('x = print')
-        assert result == [{'col': 4, 'line': 1, 'message': T101}]
+        assert result == [{'col': 4, 'line': 1, 'message': T002}]
 
     @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_assignment_value_else(self):
         result = check_code_for_print_statements('x = print if True else 1')
-        assert result == [{'col': 4, 'line': 1, 'message': T101}]
+        assert result == [{'col': 4, 'line': 1, 'message': T002}]
         result = check_code_for_print_statements('x = 1 if True else print')
-        assert result == [{'col': 19, 'line': 1, 'message': T101}]
+        assert result == [{'col': 19, 'line': 1, 'message': T002}]
 
     @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_assignment_value_or(self):
         result = check_code_for_print_statements('x = print or 1')
-        assert result == [{'col': 4, 'line': 1, 'message': T101}]
+        assert result == [{'col': 4, 'line': 1, 'message': T002}]
         result = check_code_for_print_statements('x = 1 or print')
-        assert result == [{'col': 9, 'line': 1, 'message': T101}]
+        assert result == [{'col': 9, 'line': 1, 'message': T002}]
 
     @pytest.mark.skipif(PY2, reason="requires python3")
     def test_print_in_lambda(self):
         result = check_code_for_print_statements('x = lambda a: print')
-        assert result == [{'col': 14, 'line': 1, 'message': T101}]
+        assert result == [{'col': 14, 'line': 1, 'message': T002}]
 
 
 class TestPprintCases(object):

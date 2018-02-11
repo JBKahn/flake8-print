@@ -3,7 +3,7 @@ import pycodestyle
 import ast
 from six import PY2, PY3
 
-__version__ = '3.0.1'
+__version__ = '3.1.0'
 
 PRINT_FUNCTION_NAME = "print"
 PPRINT_FUNCTION_NAME = "pprint"
@@ -15,8 +15,8 @@ VIOLATIONS = {
         'pprint': 'T003 pprint found.',
     },
     'declared': {
-        'print': 'T101 Python 2.x reserved word print used.',
-        'pprint': 'T103 pprint declared',
+        'print': 'T002 Python 2.x reserved word print used.',
+        'pprint': 'T004 pprint declared',
     },
 }
 
