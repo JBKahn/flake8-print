@@ -19,9 +19,9 @@ def get_long_description():
     return '\n\n'.join(descr)
 
 
-install_requires = ['flake8>=1.5', 'six', 'pycodestyle']
+install_requires = ['flake8>=1.5', 'six', 'pycodestyle<2.4.0,>=2.0.0']
 
-test_requires = ['pytest', 'flake8>=1.5', 'pycodestyle']
+test_requires = ['pytest', 'flake8>=1.5', 'pycodestyle<2.4.0,>=2.0.0']
 
 setup(
     name='flake8-print',
