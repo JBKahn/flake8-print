@@ -3,7 +3,12 @@ import pycodestyle
 import ast
 from six import PY2, PY3
 
-__version__ = '3.1.0'
+try:
+    from flake8.engine import pep8 as stdin_utils
+except ImportError:
+    from flake8 import utils as stdin_utils
+
+__version__ = '3.1.1'
 
 PRINT_FUNCTION_NAME = "print"
 PPRINT_FUNCTION_NAME = "pprint"
@@ -78,7 +83,7 @@ class PrintChecker(object):
     def load_file(self):
         if self.filename in ("stdin", "-", None):
             self.filename = "stdin"
-            self.lines = pycodestyle.stdin_get_value().splitlines(True)
+            self.lines = stdin_utils.stdin_get_value().splitlines(True)
         else:
             self.lines = pycodestyle.readlines(self.filename)
 
