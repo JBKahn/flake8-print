@@ -20,5 +20,6 @@ matrix:
 install:
   - pip install poetry
   - poetry install
-  - if [[ -n "$FLAKE8_VERSION" ]]; then poetry install flake8=="$FLAKE8_VERSION"; fi
-script: "pytest"
+  - if [[ -n "$FLAKE8_VERSION" ]]; then poetry run pip install flake8=="$FLAKE8_VERSION"; fi
+script:
+  - poetry run pytest
