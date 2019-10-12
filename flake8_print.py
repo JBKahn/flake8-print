@@ -8,21 +8,15 @@ try:
 except ImportError:
     from flake8 import utils as stdin_utils
 
-__version__ = '3.1.1'
+__version__ = "3.1.1"
 
 PRINT_FUNCTION_NAME = "print"
 PPRINT_FUNCTION_NAME = "pprint"
 PRINT_FUNCTION_NAMES = [PRINT_FUNCTION_NAME, PPRINT_FUNCTION_NAME]
 
 VIOLATIONS = {
-    'found': {
-        'print': 'T001 print found.',
-        'pprint': 'T003 pprint found.',
-    },
-    'declared': {
-        'print': 'T002 Python 2.x reserved word print used.',
-        'pprint': 'T004 pprint declared',
-    },
+    "found": {"print": "T001 print found.", "pprint": "T003 pprint found."},
+    "declared": {"print": "T002 Python 2.x reserved word print used.", "pprint": "T004 pprint declared"},
 }
 
 
@@ -39,7 +33,8 @@ class PrintFinder(ast.NodeVisitor):
     def visit_Call(self, node):
         is_print_function = getattr(node.func, "id", None) in PRINT_FUNCTION_NAMES
         is_print_function_attribute = (
-            getattr(getattr(node.func, "value", None), "id", None) in PRINT_FUNCTION_NAMES and getattr(node.func, "attr", None) in PRINT_FUNCTION_NAMES
+            getattr(getattr(node.func, "value", None), "id", None) in PRINT_FUNCTION_NAMES
+            and getattr(node.func, "attr", None) in PRINT_FUNCTION_NAMES
         )
         if is_print_function:
             self.prints_used[(node.lineno, node.col_offset)] = VIOLATIONS["found"][node.func.id]
@@ -72,7 +67,7 @@ class PrintFinder(ast.NodeVisitor):
 
 class PrintChecker(object):
     options = None
-    name = 'flake8-print'
+    name = "flake8-print"
     version = __version__
 
     def __init__(self, tree, filename):

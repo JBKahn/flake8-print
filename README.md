@@ -26,93 +26,78 @@ available in ``flake8``::
 
 Error codes
 -----------
-+------------+-------------------------------------+
-| Error code | Description                         |
-+============+=====================================+
-| T001       | print found                         |
-+------------+-------------------------------------+
-| T002       | Python 2.x reserved word print used |
-+------------+-------------------------------------+
-| T003       | pprint found                        |
-+------------+-------------------------------------+
-| T004       | pprint declared                     |
-+------------+-------------------------------------+
+
+| Error Code  | Description                          |
+| ----------- | ------------------------------------ |
+| T001        | print found                          |
+| T002        | Python 2.x reserved word print used  |
+| T003        | pprint found                         |
+| T004        | pprint declared                      |
+
 
 Changes
 -------
 
-3.1.1 - 2019-03-12
-``````````````````
+##### 3.1.1 - 2019-03-12
 
 * Fix reading from stdin when it is closed.
+* Add error codes to ReadMe.
+* Swapped to poetry from setup.py
+* Ran black on the repository
 
-3.1.0 - 2018-02-11
-``````````````````
+##### 3.1.0 - 2018-02-11
 * Add a framework classifier for use in pypi.org
 * Fix entry_point in setup.py leaving it off by default again.
 
-3.0.1 - 2017-11-06
-``````````````````
+##### 3.0.1 - 2017-11-06
 * Fix conflict in setup.py leaving it off by default again.
 * Fix bug in name code.
 
-3.0.0 - 2017-11-05
-``````````````````
+##### 3.0.0 - 2017-11-05
 * Remove some of the python 2/3 message differentiation.
 * Use an AST rather than a logical line checker with a regex.
 * pprint support.
 * Loss of multiline noqa support, until there is a way to use both the AST and have flake8 provide the noqa lines.
 
 
-2.0.2 - 2016-02-29
-``````````````````
+##### 2.0.2 - 2016-02-29
 * Fix ReadMe for pipy
 * Refactor, DRY it up.
 * Update python 2 vs python 3 print statement styles.
 
-2.0.1 - 2015-11-21
-``````````````````
+##### 2.0.1 - 2015-11-21
 * Add back the decorator to fix the `flake8 --version` call.
 
-2.0 - 2015-11-10
-````````````````
+##### 2.0 - 2015-11-10
 * Support noqa at end of multiline print statement
 * Performance improvements
 * Removed PrintStatementChecker class and other functions
 * Added T101 for 'Python 2.x reserved word print used.'
 * Added testing for Python 3.3 and 3.5, and different flake8 versions
 
-1.6.1 - 2015-05-22
-``````````````````
+##### 1.6.1 - 2015-05-22
 * Fix bug introduced in 1.6.
 
-1.6 - 2015-05-18
-````````````````
+##### 1.6 - 2015-05-18
 * Added proper support for python3 and testing for python 2.6, 2.7 and 3.4
 
-1.5 - 2014-11-04
-````````````````
+##### 1.5 - 2014-11-04
 * Added python2.6 support. Thanks @zoidbergwill
 
-1.4 - 2014-10-06
-````````````````
+##### 1.4 - 2014-10-06
 * Apped noqa support
 
-1.3 - 2014-09-27
-````````````````
+##### 1.3 - 2014-09-27
 * Dropped noqa support
 * Support for multiline comments and less false positives
 
-1.2 - 2014-06-30
-````````````````
+##### 1.2 - 2014-06-30
 * Does not catch the word print in single line strings
 * Does not catch inline comments with print in it
 * Added tests
 
-1.1 - 2014-06-30
-````````````````
+##### 1.1 - 2014-06-30
 * First release
 
-1.0 - 2014-06-30
-````````````````
+##### 1.0 - 2014-06-30
 * Whoops
