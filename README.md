@@ -40,7 +40,7 @@ Changes
 
 ##### 3.1.1 - 2019-03-12
 
-* Fix reading from stdin when it is closed.
+* Fix reading from stdin when it is closed (requires flake8 > 2.1).
 * Add error codes to ReadMe.
 * Swapped to poetry from setup.py
 * Ran black on the repository

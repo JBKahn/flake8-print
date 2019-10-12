@@ -7,14 +7,8 @@ python:
 env:
   matrix:
     - FLAKE8_VERSION=""
-    - FLAKE8_VERSION="1.5"
     - FLAKE8_VERSION="2.1"
     - FLAKE8_VERSION="3.2.1"
-
-matrix:
-  exclude:
-    - python: "3.5"
-      env: FLAKE8_VERSION="1.5"
 
 install:
   - pip install poetry

@@ -46,7 +46,7 @@ T00 = "flake8_print:PrintChecker"
 
 [tool.poetry.dependencies]
 python = "^3.6 || ^3.7 || ^2.7"
-"flake8" = ">=1.5"
+"flake8" = ">=2.1"
 six = "*"
 pycodestyle = "*"
 
