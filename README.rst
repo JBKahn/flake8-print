@@ -41,6 +41,11 @@ Error codes
 Changes
 -------
 
+3.1.1 - 2019-03-12
+``````````````````
+
+* Fix reading from stdin when it is closed.
+
 3.1.0 - 2018-02-11
 ``````````````````
 * Add a framework classifier for use in pypi.org
