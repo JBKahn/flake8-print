@@ -18,7 +18,7 @@ matrix:
       env: FLAKE8_VERSION="1.5"
 
 install:
-  - pip install pycodestyle
-  - if [[ -n "$FLAKE8_VERSION" ]]; then pip install flake8=="$FLAKE8_VERSION"; fi
-  - python setup.py install
+  - pip install poetry
+  - poetry install
+  - if [[ -n "$FLAKE8_VERSION" ]]; then poetry install flake8=="$FLAKE8_VERSION"; fi
 script: "pytest"
