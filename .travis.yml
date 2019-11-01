@@ -11,8 +11,8 @@ env:
     - FLAKE8_VERSION="3.2.1"
 
 install:
-  - pip install poetry
-  - poetry install
-  - if [[ -n "$FLAKE8_VERSION" ]]; then poetry run pip install flake8=="$FLAKE8_VERSION"; fi
+  - pip install pycodestyle
+  - if [[ -n "$FLAKE8_VERSION" ]]; then pip install flake8=="$FLAKE8_VERSION"; fi
+  - python setup.py install
 script:
-  - poetry run pytest
+  - pytest
