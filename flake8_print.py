@@ -8,7 +8,7 @@ try:
 except ImportError:
     from flake8 import utils as stdin_utils
 
-__version__ = "3.1.3"
+__version__ = "3.1.4"
 
 PRINT_FUNCTION_NAME = "print"
 PPRINT_FUNCTION_NAME = "pprint"
@@ -99,12 +99,12 @@ class PrintChecker(object):
                 if error in errors_seen:
                     continue
 
+                errors_seen.add(error)
                 code = message.split(' ', 1)[0]
                 line = self.lines[error[0] - 1]
                 line_has_noqa = bool(pycodestyle.noqa(line))
 
-                if line_has_noqa is True and code in line:
+                if line_has_noqa is True and (code in line or "nopep8" in line):
                     continue
 
-                errors_seen.add(error)
                 yield (error[0], error[1], message, PrintChecker)

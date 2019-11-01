@@ -38,6 +38,11 @@ Error codes
 Changes
 -------
 
+##### 3.1.4 - 2019-1-11
+
+* Fix bug introduced in 3.1.3
+* Support for `nopep8` comments
+
 ##### 3.1.3 - 2019-31-10
 
 * Swapped back from poetry to setup.py :(....python ecosystem issues....
