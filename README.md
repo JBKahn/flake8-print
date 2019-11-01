@@ -38,6 +38,11 @@ Error codes
 Changes
 -------
 
+##### 3.1.2 - 2019-31-10
+
+* Swapped back from poetry to setup.py :(....python ecosystem issues....
+* single function refactor code
+
 ##### 3.1.1 - 2019-03-12
 
 * Fix reading from stdin when it is closed (requires flake8 > 2.1).

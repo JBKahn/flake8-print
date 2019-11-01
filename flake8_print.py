@@ -8,7 +8,7 @@ try:
 except ImportError:
     from flake8 import utils as stdin_utils
 
-__version__ = "3.1.1"
+__version__ = "3.1.2"
 
 PRINT_FUNCTION_NAME = "print"
 PPRINT_FUNCTION_NAME = "pprint"
@@ -91,11 +91,20 @@ class PrintChecker(object):
 
         parser = PrintFinder()
         parser.visit(self.tree)
-        for error, message in parser.prints_used.items():
-            if not pycodestyle.noqa(self.lines[error[0] - 1]):
-                yield (error[0], error[1], message, PrintChecker)
+        error_dicts = (parser.prints_used, parser.prints_redefined)
+        errors_seen = set()
 
-        for error, message in parser.prints_redefined.items():
-            if error not in parser.prints_used:
-                if not pycodestyle.noqa(self.lines[error[0] - 1]):
-                    yield (error[0], error[1], message, PrintChecker)
+        for index, error_dict in enumerate(error_dicts):
+            for error, message in error_dict.items():
+                if error in errors_seen:
+                    continue
+
+                code = message.split(' ', 1)[0]
+                line = self.lines[error[0] - 1]
+                line_has_noqa = bool(pycodestyle.noqa(line))
+
+                if line_has_noqa is True and code in line:
+                    continue
+
+                errors_seen.add(error)
+                yield (error[0], error[1], message, PrintChecker)

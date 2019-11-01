@@ -64,8 +64,17 @@ T004 = "T004 pprint declared."
 class TestNoQA(object):
     @pytest.mark.skipif(sys.version_info < (2, 7), reason="Python 2.6 does not support noqa")
     def test_skips_noqa(self):
-        result = check_code_for_print_statements("print(4) # noqa")
+        result = check_code_for_print_statements("print(4)  # noqa")
         assert result == list()
+
+    def test_skips_noqa__with_specific_error_code(self):
+        result = check_code_for_print_statements("print(4)  # noqa: T001")
+        assert result == list()
+
+    @pytest.mark.skip(reason="not supported by pycodestyle ast checks")
+    def test_skips_noqa__without_specific_error_code(self):
+        result = check_code_for_print_statements("print(4)  # noqa: E731")
+        assert result == [1]
 
     @pytest.mark.skipif(True, reason="no idea how to get this to work without local line")
     def test_skips_noqa_multiline_end(self):
