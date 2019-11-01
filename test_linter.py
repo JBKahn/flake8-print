@@ -71,6 +71,7 @@ class TestNoQA(object):
         result = check_code_for_print_statements("print(4)  # noqa: T001")
         assert result == list()
 
+    @pytest.mark.skip(reason="not supported by pycodestyle ast checks")
     def test_skips_noqa__without_specific_error_code(self):
         result = check_code_for_print_statements("print(4)  # noqa: E731")
         assert result == [1]

@@ -41,6 +41,7 @@ Changes
 ##### 3.1.2 - 2019-31-10
 
 * Swapped back from poetry to setup.py :(....python ecosystem issues....
+* Skipped unsupported test of using NOQA with a flag for a specific code, unsupported by [pycodestyle](https://github.com/PyCQA/pycodestyle/blob/d219c684f117be77927d33146e76a5364161e518/pycodestyle.py#L2071).
 
 ##### 3.1.1 - 2019-03-12
 
