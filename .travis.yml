@@ -1,18 +1,18 @@
 language: python
 python:
-  - "2.7"
   - "3.6"
   - "3.7"
+  - "3.8"
+  - "3.9"
 
 env:
   matrix:
     - FLAKE8_VERSION=""
-    - FLAKE8_VERSION="2.1"
-    - FLAKE8_VERSION="3.2.1"
+    - FLAKE8_VERSION="3.0"
 
 install:
-  - pip install pycodestyle
-  - if [[ -n "$FLAKE8_VERSION" ]]; then pip install flake8=="$FLAKE8_VERSION"; fi
-  - python setup.py install
+  - pip install poetry
+  - poetry install
+  - if [[ -n "$FLAKE8_VERSION" ]]; then poetry run pip install flake8=="$FLAKE8_VERSION"; fi
 script:
-  - pytest
+  - poetry run pytest
