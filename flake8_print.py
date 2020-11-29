@@ -8,7 +8,7 @@ try:
 except ImportError:
     from flake8 import utils as stdin_utils
 
-__version__ = "3.1.4"
+__version__ = "4.0.0"
 
 PRINT_FUNCTION_NAME = "print"
 PPRINT_FUNCTION_NAME = "pprint"
