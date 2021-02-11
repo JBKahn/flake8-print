@@ -24,6 +24,16 @@ available in ``flake8``::
     $ flake8 --version
     2.4.1 (pep8: 1.5.7, flake8-print: 2.0.0, mccabe: 0.3.1, pyflakes: 0.8.1)
 
+Flake8 allows disabling some tests based on the folder:
+
+```
+[flake8]
+per-file-ignores =
+    scripts/*: T00
+    cli.py: T00
+```
+
+
 Error codes
 -----------
 
