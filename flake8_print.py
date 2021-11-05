@@ -100,11 +100,5 @@ class PrintChecker(object):
                     continue
 
                 errors_seen.add(error)
-                code = message.split(' ', 1)[0]
-                line = self.lines[error[0] - 1]
-                line_has_noqa = bool(pycodestyle.noqa(line))
-
-                if line_has_noqa is True and (code in line or "nopep8" in line):
-                    continue
 
                 yield (error[0], error[1], message, PrintChecker)
