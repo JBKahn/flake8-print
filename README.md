@@ -38,6 +38,10 @@ Error codes
 Changes
 -------
 
+##### 4.0.1 - 2022-04-30
+
+* Fixing bug with noqa detection by removing manual detection and relying on flake8 itself.
+
 ##### 4.0.0 - 2020-11-29
 
 * Opted back into using Poetry now that the existing issues have been fixed.
