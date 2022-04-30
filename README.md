@@ -29,24 +29,27 @@ Flake8 allows disabling some tests based on the folder:
 ```
 [flake8]
 per-file-ignores =
-    scripts/*: T00
-    cli.py: T00
+    scripts/*: T20
+    cli.py: T20
 ```
-
 
 Error codes
 -----------
 
 | Error Code  | Description                          |
 | ----------- | ------------------------------------ |
-| T001        | print found                          |
-| T002        | Python 2.x reserved word print used  |
-| T003        | pprint found                         |
-| T004        | pprint declared                      |
+| T201        | print found                          |
+| T203        | pprint found                         |
+| T204        | pprint declared                      |
 
 
 Changes
 -------
+
+##### 5.0.0 - 2022-04-30
+
+* Move namespace from T0* to T2* to avoid collision with other library using same error code.
+* Remove python 2 specific code paths, error messages and six usage.
 
 ##### 4.0.1 - 2022-04-30
 

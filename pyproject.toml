@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "flake8-print"
-version = "4.0.1"
+version = "5.0.0"
 description = "print statement checker plugin for flake8"
 readme = "README.md"
 
@@ -42,16 +42,15 @@ classifiers = [
 include = ["pyproject.toml", "flake8_print.py", "LICENCE"]
 
 [tool.poetry.plugins."flake8.extension"]
-T00 = "flake8_print:PrintChecker"
+T20 = "flake8_print:PrintChecker"
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = ">=3.7"
 "flake8" = ">=3.0"
-six = "*"
 pycodestyle = "*"
 
 [tool.poetry.dev-dependencies]
-black = { version = "^20.8b1" }
+black = { version = "^22.3.0" }
 pytest = "*"
 
 [tool.black]
