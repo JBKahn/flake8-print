@@ -33,7 +33,6 @@ per-file-ignores =
     cli.py: T20
 ```
 
-
 Error codes
 -----------
 
