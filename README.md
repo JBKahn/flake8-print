@@ -3,26 +3,33 @@ Flake8 print plugin
 
 Check for Print statements in python files.
 
-This module provides a plugin for ``flake8``, the Python code checker.
+This module provides a plugin for `flake8`, the Python code checker.
 
 
 Installation
 ------------
 
-You can install or upgrade ``flake8-print`` with these commands::
+You can install or upgrade `flake8-print` with these commands:
 
-  $ pip install flake8-print
-  $ pip install --upgrade flake8-print
+```bash
+pip install flake8-print
+```
+
+```bash
+pip install --upgrade flake8-print
+```
 
 
 Plugin for Flake8
 -----------------
 
-When both ``flake8 2.4.1`` and ``flake8-print`` are installed, the plugin is
-available in ``flake8``::
+When both `flake8 2.4.1` and `flake8-print` are installed, the plugin is
+available in `flake8`:
 
-    $ flake8 --version
-    2.4.1 (pep8: 1.5.7, flake8-print: 2.0.0, mccabe: 0.3.1, pyflakes: 0.8.1)
+```bash
+flake8 --version
+  2.4.1 (pep8: 1.5.7, flake8-print: 2.0.0, mccabe: 0.3.1, pyflakes: 0.8.1)
+```
 
 Flake8 allows disabling some tests based on the folder:
 
