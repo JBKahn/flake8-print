@@ -41,10 +41,14 @@ Error codes
 | T201        | print found                          |
 | T203        | pprint found                         |
 | T204        | pprint declared                      |
+| T205        | traceback print                      |
 
 
 Changes
 -------
+
+##### 5.1.0 - 2023-07-18
+* Add support for traceback.print_* functions
 
 ##### 5.0.0 - 2022-04-30
 
