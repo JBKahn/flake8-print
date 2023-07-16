@@ -56,6 +56,7 @@ T201 = "T201 print found."
 T203 = "T203 pprint found."
 T202 = "T202 Python 2.x reserved word print used."
 T204 = "T204 pprint declared."
+T205 = "T205 traceback print found."
 
 
 class TestGenericCases(object):
@@ -89,6 +90,40 @@ class TestGenericCases(object):
     def test_catches_print_invocation_in_lambda(self):
         result = check_code_for_print_statements("x = lambda a: print(a)")
         assert result == [{"col": 14, "line": 1, "message": T201}]
+
+
+class TestTracebackPrintCases(object):
+    prohibited_funcs = ["print_tb", "print_exception", "print_exc", "print_last", "print_stack"]
+
+    def test_print_funcs(self):
+        for func in self.prohibited_funcs:
+            result = check_code_for_print_statements(f"import traceback; traceback.{func}()")
+            assert result == [{"col": 18, "line": 1, "message": T205}]
+
+    def test_print_funcs_imported_from(self):
+        for func in self.prohibited_funcs:
+            result = check_code_for_print_statements(f"from traceback import {func}; {func}()")
+            assert result == [{"col": 24 + len(func), "line": 1, "message": T205}]
+
+    def test_print_funcs_imported_from_as(self):
+        for func in self.prohibited_funcs:
+            result = check_code_for_print_statements(f"from traceback import {func} as pre; pre()")
+            assert result == [{"col": 31 + len(func), "line": 1, "message": T205}]
+
+    def test_func_import_as(self):
+        for func in self.prohibited_funcs:
+            result = check_code_for_print_statements(f"import traceback as tb; tb.{func}()")
+            assert result == [{"col": 24, "line": 1, "message": T205}]
+
+
+class TestTracebackPrintFalsePositiveCases(object):
+    def test_valid_import(self):
+        result = check_code_for_print_statements("import traceback")
+        assert result == []
+
+    def test_non_prohibited_func(self):
+        result = check_code_for_print_statements("import traceback; traceback.format_exception()")
+        assert result == []
 
 
 class TestComments(object):
